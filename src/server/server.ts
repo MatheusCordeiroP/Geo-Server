@@ -1,9 +1,21 @@
-import express, { Router } from 'express';
-import { router } from '../routes';
+import express from 'express';
+import router from '../routes';
+
+import mongoose from 'mongoose';
+import { url } from '../config/config';
 
 const server = express();
 
-server.use(express.json);
+mongoose
+  .connect(url, {})
+  .then(result => {
+    console.log('Connection to MongoDB!');
+  })
+  .catch(error => {
+    console.log('Error on connecting MongoDB::', error.message, error);
+  });
+
+server.use(express.json());
 server.use(router);
 
-export default server;
+export { server };

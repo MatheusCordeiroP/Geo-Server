@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import './database';
-import server from './server/server';
+import { server } from './server/server';
 
 const port = process.env.PORT || 3003;
 

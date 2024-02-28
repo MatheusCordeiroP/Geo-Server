@@ -113,22 +113,110 @@ Observação: Apenas coordinates ou address devem ser enviados para a criação 
 ##### Exemplo cURL
 
 > ```javascript
->  curl --location 'http://localhost:3003/api/v1/user/create' \
-> --header 'Content-Type: application/json' \
-> --data-raw '{
+>  curl --location 'http://localhost:3003/api/v1/user/create' --header 'Content-Type: application/json' --data-raw '{ "name": "Matheus Cordeiro",     "email": "matheus@provedormail.com", "coordinates": [ -23.005, -41.005 ] }'
 > ```
 
-    "name": "Matheus Cordeiro",
-    "email": "matheus@provedormail.com",
-    "coordinates": [
-        -23.005,
-        -41.005
-    ]
+</details>
 
-}'
+<details>
+ <summary><code>GET</code> <code><b>/api/v1/user?limit=10&offset=0</b></code> <code>(procura todos os usuários dentro de um limit e offset enviados na requisição.)</code></summary>
 
+##### Exemplo cURL
+
+> ```javascript
+> curl --location 'http://localhost:3003/api/v1/user?limit=10&offset=0'
 > ```
->
+
+</details>
+
+<details>
+ <summary><code>GET</code> <code><b>/api/v1/user/:id</b></code> <code>(procura um usuário específico através de seu id.)</code></summary>
+
+##### Exemplo cURL
+
+> ```javascript
+> curl --location 'http://localhost:3003/api/v1/user/65de1bd4c2dfc8b56cdd1e25'
+> ```
+
+</details>
+
+<details>
+ <summary><code>PUT</code> <code><b>/api/v1/user/:id</b></code> <code>(procura um usuário específico através de seu id, e o atualiza com os parâmetros passados através do body.)</code></summary>
+
+##### Exemplo cURL
+
+> ```javascript
+> curl --location --request PUT 'http://localhost:3003/api/v1/user/65de1bd4c2dfc8b56cdd1e25' --header 'Content-Type: application/json' --data '{ "name":"NOVO NOME", "address": "NOVO ENDEREÇO" }'
+> ```
+
+</details>
+
+<details>
+ <summary><code>DELETE</code> <code><b>/api/v1/user/:id</b></code> <code>(procura um usuário específico através de seu id e o apaga do banco de dados.)</code></summary>
+
+##### Exemplo cURL
+
+> ```javascript
+> curl --location --request DELETE 'http://localhost:3003/api/v1/user/65ddef39e9032e08525dedf5'
+> ```
+
+</details>
+
+---
+
+#### Rotas de Regiões
+
+<details>
+ <summary><code>POST</code> <code><b>/api/v1/region/create</b></code> <code>(cria uma nova região com as informações fornecidas)</code></summary>
+
+##### Exemplo cURL
+
+> ```javascript
+> curl --location 'http://localhost:3003/api/v1/region/create' --header 'Content-Type: application/json' --data '{ "name": "Cidade de São Paulo","region": {"type": "Polygon","coordinates": [[[0.0,1.0],[1.0,1.0],[0.0,0.0], [ 0.0, 1.0 ]]]}, "created_by": "65ddef39e9032e08525dedf5" }'
+> ```
+
+</details>
+
+<details>
+ <summary><code>GET</code> <code><b>/api/v1/region?limit=10&offset=0</b></code> <code>(procura todas as regiões dentro de um limit e offset enviados na requisição.)</code></summary>
+
+##### Exemplo cURL
+
+> ```javascript
+> curl --location 'http://localhost:3003/api/v1/region?limit=10&offset=0'
+> ```
+
+</details>
+
+<details>
+ <summary><code>GET</code> <code><b>/api/v1/region/:id</b></code> <code>(procura uma região em específico através de seu id.)</code></summary>
+
+##### Exemplo cURL
+
+> ```javascript
+> curl --location 'http://localhost:3003/api/v1/region/65ddf014e9032e08525dedfb'
+> ```
+
+</details>
+
+<details>
+ <summary><code>PUT</code> <code><b>/api/v1/region/:id</b></code> <code>(procura uma região em específico através de seu id, e a atualiza com os parâmetros passados através do body.)</code></summary>
+
+##### Exemplo cURL
+
+> ```javascript
+> curl --location --request PUT 'http://localhost:3003/api/v1/region/65ddf41a3e730c754bcdea4d' --header 'Content-Type: application/json' --data '{"name": "Novo Nome"}'
+> ```
+
+</details>
+
+<details>
+ <summary><code>DELETE</code> <code><b>/api/v1/region/:id</b></code> <code>(procura uma região em específico através de seu id e a apaga do banco de dados.)</code></summary>
+
+##### Exemplo cURL
+
+> ```javascript
+> curl --location --request DELETE 'http://localhost:3003/api/v1/region/65ddf41a3e730c754bcdea4d'
 > ```
 
 </details>

@@ -3,6 +3,7 @@ import * as Joi from 'joi';
 import { validation } from '../../middlewares';
 import { StatusCodes } from 'http-status-codes';
 import { GeoJSON } from 'geojson';
+import Region from '../../models/regions';
 
 interface IBodyProps {
   region_id?: string;
@@ -38,7 +39,9 @@ const bodySchema: Joi.Schema<IBodyProps> = Joi.object().keys({
   created_by: Joi.string().optional(),
 });
 const paramsSchema: Joi.Schema<IParamProps> = Joi.object().keys({
-  id: Joi.string().invalid('').required(),
+  id: Joi.string()
+    .regex(/^[0-9a-fA-F]{24}$/)
+    .required(),
 });
 
 export const updateByIdValidation = validation({
@@ -47,7 +50,15 @@ export const updateByIdValidation = validation({
 });
 
 export const updateById = async (req: Request<any>, res: Response) => {
-  const id: IParamProps = req.params;
-  const body: IBodyProps = req.body;
-  return res.status(StatusCodes.NOT_IMPLEMENTED).send('Not implemented.');
+  try {
+    const params: IParamProps = req.params;
+    const data: IBodyProps = req.body;
+
+    console.log(params, data);
+
+    const results = await Region.findByIdAndUpdate(params.id, data);
+    return res.status(StatusCodes.OK).send(results);
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(error);
+  }
 };

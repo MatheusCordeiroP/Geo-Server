@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import * as Joi from 'joi';
 import { validation } from '../../middlewares';
 import { StatusCodes } from 'http-status-codes';
+import User from '../../models/users';
 
 interface IBodyProps {
   name: string;
@@ -33,7 +34,34 @@ export const create = async (
   req: Request<{}, {}, IBodyProps>,
   res: Response
 ) => {
-  const data: IBodyProps = req.body;
+  let data: IBodyProps = req.body;
 
-  return res.status(StatusCodes.NOT_IMPLEMENTED).send({});
+  try {
+    if (data.address) {
+      data.coordinates = getCoordinatesWithAddress();
+    }
+    if (data.coordinates) {
+      data.address = getAddressWithCoordinates();
+    }
+
+    const user = new User({
+      name: data.name,
+      email: data.email,
+      address: data.address,
+      coordinates: data.coordinates,
+    });
+    user.save();
+
+    return res.status(StatusCodes.CREATED).send(user);
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(error.message);
+  }
+};
+
+const getCoordinatesWithAddress = () => {
+  return [5.2, 0.0];
+};
+
+const getAddressWithCoordinates = () => {
+  return 'mocked address';
 };

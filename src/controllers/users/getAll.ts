@@ -2,8 +2,7 @@ import { Request, Response } from 'express';
 import * as Joi from 'joi';
 import { validation } from '../../middlewares';
 import { StatusCodes } from 'http-status-codes';
-import { ParsedQs } from 'qs';
-import Region from '../../models/regions';
+import User from '../../models/users';
 
 interface IQueryProps {
   limit: number;
@@ -17,9 +16,20 @@ const querySchema: Joi.Schema<IQueryProps> = Joi.object().keys({
 
 export const getAllValidation = validation({ query: querySchema });
 
-export const getAll = async (
-  req: Request<{}, {}, {}, ParsedQs>,
-  res: Response
-) => {
-  const data: IQueryProps = req.query as any;
+export const getAll = async (req: Request<{}, {}, {}, any>, res: Response) => {
+  const data: IQueryProps = req.query;
+  const results = await User.find().skip(data.offset).limit(data.limit);
+
+  // TODO: corrigir o count
+
+  //   return res.json({
+  //     rows: users,
+  //     page,
+  //     limit,
+  //     total,
+  //   });
+
+  return res
+    .status(StatusCodes.OK)
+    .json({ users: results, count: results.length });
 };

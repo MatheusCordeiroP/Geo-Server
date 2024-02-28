@@ -1,25 +1,22 @@
 import express, { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { RegionsController, UsersController } from './../models/index';
+import region from './region';
+import user from './user';
 
 const app = express();
 const router = Router();
 
 router.get('/', (request, response) => {
-  response.json({
+  response.status(StatusCodes.OK).json({
     message: 'Hooray! Welcome to our API!',
     timestamp: Date.now(),
   });
 });
 
-router.get('/teste', (request, response) => {
-  return response.send('Teste');
-});
-
-router.post('/region/create', RegionsController.create);
-
-router.post('/user/create', UsersController.create);
+app.use('/', router);
+app.use('/api/v1/region', region);
+app.use('/api/v1/user', user);
 
 // const STATUS = {
 //   OK: 200,
@@ -78,4 +75,4 @@ router.post('/user/create', UsersController.create);
 //   return res.sendStatus(201);
 // });
 
-export { app, router };
+export default app;

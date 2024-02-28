@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import * as Joi from 'joi';
 import { validation } from '../../middlewares';
 import { StatusCodes } from 'http-status-codes';
-import { ParsedQs } from 'qs';
 import Region from '../../models/regions';
 
 interface IQueryProps {
@@ -17,23 +16,12 @@ const querySchema: Joi.Schema<IQueryProps> = Joi.object().keys({
 
 export const getAllValidation = validation({ query: querySchema });
 
-export const getAll = async (
-  req: Request<{}, {}, {}, ParsedQs>,
-  res: Response
-) => {
-  await Region.find()
-    .exec()
-    .then(results => {
-      return res.status(StatusCodes.OK).json({
-        regions: results,
-        count: results.length,
-      });
-    })
-    .catch(error => {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        message: error.message,
-        error,
-      });
-    });
-  // return res.status(StatusCodes.NOT_IMPLEMENTED).send('Not implemented.');
+export const getAll = async (req: Request<{}, {}, {}, any>, res: Response) => {
+  const data: IQueryProps = req.query;
+  const results = await Region.find().skip(data.offset).limit(data.limit);
+
+  // TODO: corrigir o count
+  return res
+    .status(StatusCodes.OK)
+    .json({ regions: results, count: results.length });
 };

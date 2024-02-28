@@ -18,10 +18,8 @@ export const getAllValidation = validation({ query: querySchema });
 
 export const getAll = async (req: Request<{}, {}, {}, any>, res: Response) => {
   const data: IQueryProps = req.query;
-  const results = await Region.find().skip(data.offset).limit(data.limit);
+  const regions = await Region.find().skip(data.offset).limit(data.limit);
+  const total = await Region.count();
 
-  // TODO: corrigir o count
-  return res
-    .status(StatusCodes.OK)
-    .json({ regions: results, count: results.length });
+  return res.status(StatusCodes.OK).json({ regions, total });
 };

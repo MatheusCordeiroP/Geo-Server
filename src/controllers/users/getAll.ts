@@ -18,18 +18,8 @@ export const getAllValidation = validation({ query: querySchema });
 
 export const getAll = async (req: Request<{}, {}, {}, any>, res: Response) => {
   const data: IQueryProps = req.query;
-  const results = await User.find().skip(data.offset).limit(data.limit);
+  const users = await User.find().skip(data.offset).limit(data.limit);
+  const total = await User.count();
 
-  // TODO: corrigir o count
-
-  //   return res.json({
-  //     rows: users,
-  //     page,
-  //     limit,
-  //     total,
-  //   });
-
-  return res
-    .status(StatusCodes.OK)
-    .json({ users: results, count: results.length });
+  return res.status(StatusCodes.OK).json({ users, total });
 };
